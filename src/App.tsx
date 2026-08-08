@@ -5,10 +5,13 @@
 
 import { useState } from 'react';
 import { Sidebar, MobileNav } from './components/Navigation';
-import { UrgentHighlights, QuickMenu, StatDashboard, AnalyticsDashboard, CompactDashboard, PlacementHistoryList, ClientManagementList } from './components/DashboardSections';
+import { DetailedClientManagement, UrgentHighlights, QuickMenu, StatDashboard, AnalyticsDashboard, CompactDashboard, PlacementHistoryList, ClientManagementList } from './components/DashboardSections';
 import { ProjectGrid, CollaborationBoard, MyProjectDashboardList } from './components/ProjectListings';
 import { CandidateManagementView } from './components/CandidateManagement';
-import { MOCK_STATS, MY_PROJECTS, ALL_PROJECTS, BOARD_POSTS, PLACEMENT_HISTORY, MOCK_CANDIDATES, CLIENT_CONTACTS } from './data';
+import { ProjectCreation } from './components/ProjectCreation';
+import { PEMap } from './components/PEMap';
+import { BYPlacement } from './components/BYPlacement';
+import { MOCK_STATS, MY_PROJECTS, ALL_PROJECTS, BOARD_POSTS, PLACEMENT_HISTORY, MOCK_CANDIDATES, CLIENT_CONTACTS, PE_MAP_DATA, BY_PLACEMENT_DATA } from './data';
 import { Bell, Search, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Project } from './types';
@@ -64,6 +67,17 @@ export default function App() {
         {/* Dashboard Content */}
         <div className="p-6 max-w-7xl mx-auto space-y-10">
           <AnimatePresence mode="wait">
+            {activeTab === 'create_project' && (
+              <motion.div
+                key="create_project"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <ProjectCreation />
+              </motion.div>
+            )}
+
             {activeTab === 'dashboard' && (
               <motion.div
                 key="dashboard"
@@ -134,7 +148,7 @@ export default function App() {
                       <AnalyticsDashboard projects={ALL_PROJECTS} />
                     </section>
                     <section>
-                      <UrgentHighlights projects={ALL_PROJECTS} />
+                      <DetailedClientManagement clients={CLIENT_CONTACTS} />
                     </section>
                   </div>
                 )}
@@ -170,6 +184,17 @@ export default function App() {
               </motion.div>
             )}
 
+            {activeTab === 'pe_map' && (
+              <motion.div
+                key="pe_map"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <PEMap data={PE_MAP_DATA} />
+              </motion.div>
+            )}
+
             {activeTab === 'board' && (
               <motion.div
                 key="board"
@@ -193,6 +218,17 @@ export default function App() {
                   projects={myProjects} 
                   candidates={MOCK_CANDIDATES} 
                 />
+              </motion.div>
+            )}
+
+            {activeTab === 'placement' && (
+              <motion.div
+                key="placement"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <BYPlacement data={BY_PLACEMENT_DATA} />
               </motion.div>
             )}
           </AnimatePresence>

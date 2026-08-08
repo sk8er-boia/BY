@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LayoutDashboard, Users, MessageSquare, Briefcase, FileText, Bell, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, Briefcase, FileText, Bell, LogOut, LayoutGrid, TrendingUp, PlusCircle } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -12,10 +12,13 @@ interface SidebarProps {
 
 export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   const menuItems = [
+    { id: 'create_project', label: '프로젝트 생성', icon: PlusCircle },
     { id: 'dashboard', label: '내 대시보드', icon: LayoutDashboard },
     { id: 'company', label: '회사 프로젝트', icon: Briefcase },
+    { id: 'pe_map', label: 'PE Map', icon: LayoutGrid },
     { id: 'board', label: 'SB 게시판', icon: MessageSquare },
-    { id: 'candidates', label: '후보자 관리', icon: Users },
+    { id: 'candidates', label: '내 후보자 관리', icon: Users },
+    { id: 'placement', label: 'BY Placement', icon: TrendingUp },
   ];
 
   return (

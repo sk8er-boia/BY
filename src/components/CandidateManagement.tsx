@@ -83,10 +83,29 @@ export function CandidateManagementView({ projects, candidates }: { projects: Pr
                                 <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{candidate.name}</span>
                                 <ArrowRight size={10} className="text-slate-300 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
                               </div>
-                              <p className="text-[10px] text-slate-500 truncate">{candidate.currentCompany}</p>
-                              <div className="mt-2 pt-2 border-t border-slate-50 flex items-center justify-between">
-                                <span className="text-[8px] font-medium text-slate-400 uppercase">{candidate.updatedAt}</span>
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                              <p className="text-[10px] text-slate-500 truncate mb-1">{candidate.currentCompany}</p>
+                              
+                              <div className="flex flex-wrap gap-1 mb-2">
+                                <span className={`text-[8px] font-black px-1.5 py-0.5 rounded uppercase border ${
+                                  candidate.projectType === 'individual' ? 'bg-slate-50 text-slate-600 border-slate-200' :
+                                  candidate.projectType === 'co_platform_1' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                  'bg-indigo-50 text-indigo-600 border-indigo-100'
+                                }`}>
+                                  {candidate.projectType === 'individual' ? '개별' : 
+                                   candidate.projectType === 'co_platform_1' ? '공플1' : '공플2'}
+                                </span>
+                                {candidate.collaborator && (
+                                  <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white border border-slate-900">
+                                    {candidate.collaborator}
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="mt-2 pt-2 border-t border-slate-50 flex flex-col gap-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[9px] font-black text-blue-600">₩{(candidate.estimatedRevenue || 0).toLocaleString()}</span>
+                                  <span className="text-[8px] font-medium text-slate-400 uppercase">{candidate.updatedAt}</span>
+                                </div>
                               </div>
                             </motion.div>
                           ))}

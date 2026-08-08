@@ -25,7 +25,7 @@ export interface ClientContact {
   position: string;
   lastContactDate: string;
   history: string;
-  status: 'active' | 'idle' | 'follow_up';
+  status: 'project_in_progress' | 'project_pending' | 'bd_in_progress' | 'idle';
 }
 
 export interface PlacementRecord {
@@ -48,6 +48,9 @@ export interface Candidate {
   projectId: string;
   status: CandidateStatus;
   updatedAt: string;
+  projectType: 'individual' | 'co_platform_1' | 'co_platform_2';
+  collaborator?: string;
+  estimatedRevenue?: number;
 }
 
 export interface BoardPost {
@@ -67,4 +70,23 @@ export interface DashboardStats {
   ongoingProjects: number;
   recommendedCandidates: number;
   interviewStages: number;
+}
+
+export interface PortfolioCompany {
+  id: string;
+  name: string;
+}
+
+export interface PEFirm {
+  id: string;
+  name: string;
+  size: number;
+  portfolio: PortfolioCompany[];
+}
+
+export interface IndustryPlacement {
+  id: string;
+  industry: string;
+  size: number;
+  companies: { id: string; name: string; count: number }[];
 }

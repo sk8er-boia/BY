@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { AlertCircle, Clock, TrendingUp, Users, FileText, MessageSquare, ExternalLink, Zap, UserPlus } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PlacementRecord, Project, DashboardStats } from '../types';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, ComposedChart, LabelList } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, ComposedChart, LabelList, Legend } from 'recharts';
 import { REVENUE_TIMELINE_MONTHLY, REVENUE_TIMELINE_QUARTERLY } from '../data';
 
 export function UrgentHighlights({ projects }: { projects: Project[] }) {
@@ -58,7 +58,8 @@ export function QuickMenu() {
   const actions = [
     { label: '인재풀 등록', icon: UserPlus, color: 'bg-amber-50 text-amber-600 hover:bg-amber-100' },
     { label: '이력서 변환', icon: FileText, color: 'bg-blue-50 text-blue-600 hover:bg-blue-100' },
-    { label: 'Brisk & Young 메시지', icon: MessageSquare, color: 'bg-purple-50 text-purple-600 hover:bg-purple-100' },
+    { label: 'REMEMBER 메시지', icon: MessageSquare, color: 'bg-purple-50 text-purple-600 hover:bg-purple-100' },
+    { label: 'Weekly 요약', icon: TrendingUp, color: 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100' },
     { label: '채용공고 접속', icon: ExternalLink, color: 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' },
   ];
 
@@ -106,6 +107,8 @@ export function StatDashboard({ stats }: { stats: DashboardStats }) {
 
 const PIE_COLORS = ['#3b82f6', '#6366f1', '#a855f7', '#ec4899'];
 
+const STAGE_COLORS = ['#fbbf24', '#34d399', '#fb923c', '#f472b6', '#818cf8'];
+
 export function AnalyticsDashboard({ projects }: { projects: Project[] }) {
   const [timeView, setTimeView] = useState<'monthly' | 'quarterly'>('monthly');
   const industryData = projects.reduce((acc: any[], p) => {
@@ -119,10 +122,10 @@ export function AnalyticsDashboard({ projects }: { projects: Project[] }) {
   }, []);
 
   const statusData = [
-    { name: '신규', value: projects.filter(p => p.status === 'new').length },
-    { name: '진행중', value: projects.filter(p => p.status === 'ongoing').length },
-    { name: '인터뷰', value: projects.filter(p => p.status === 'interview').length },
     { name: '마감임박', value: projects.filter(p => p.status === 'closing').length },
+    { name: '신규', value: projects.filter(p => p.status === 'new').length },
+    { name: '인터뷰', value: projects.filter(p => p.status === 'interview').length },
+    { name: '진행중', value: projects.filter(p => p.status === 'ongoing').length },
   ];
 
   return (
@@ -131,7 +134,7 @@ export function AnalyticsDashboard({ projects }: { projects: Project[] }) {
         <h3 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider">산업군별 프로젝트 분포</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={industryData} layout="vertical" margin={{ left: 20 }}>
+            <BarChart data={industryData} layout="vertical" margin={{ left: 10, right: 30, top: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
               <XAxis type="number" hide />
               <YAxis 
@@ -139,49 +142,61 @@ export function AnalyticsDashboard({ projects }: { projects: Project[] }) {
                 type="category" 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fontSize: 12, fontWeight: 500, fill: '#64748b' }}
+                width={100}
+                tick={{ fontSize: 11, fontWeight: 700, fill: '#475569' }}
               />
               <Tooltip 
                 cursor={{ fill: '#f8fafc' }}
                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
               />
-              <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20} />
+              <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={16}>
+                {industryData.map((_entry: any, index: number) => (
+                  <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
         <h3 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider">단계별 프로젝트 현황</h3>
-        <div className="h-64 flex items-center">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={statusData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={8}
-                dataKey="value"
-              >
-                {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="pr-8 space-y-2">
-            {statusData.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[idx] }}></div>
-                <span className="text-xs font-medium text-slate-600">{item.name}</span>
-                <span className="text-xs font-bold text-slate-900 ml-auto">{item.value}건</span>
-              </div>
-            ))}
+        <div className="flex flex-col items-center">
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={statusData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={8}
+                  dataKey="value"
+                >
+                  {statusData.map((_entry, index) => (
+                    <Cell key={`cell-${index}`} fill={STAGE_COLORS[index % STAGE_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                />
+                <Legend 
+                  verticalAlign="bottom" 
+                  align="center"
+                  layout="horizontal"
+                  iconType="circle" 
+                  iconSize={8}
+                  wrapperStyle={{ 
+                    fontSize: '11px', 
+                    fontWeight: 700, 
+                    color: '#64748b',
+                    paddingTop: '20px',
+                    width: '100%'
+                  }} 
+                />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
@@ -418,6 +433,79 @@ export function PlacementHistoryList({ history }: { history: PlacementRecord[] }
 import { ClientContact } from '../types';
 import { Phone, Mail, History } from 'lucide-react';
 
+export function DetailedClientManagement({ clients }: { clients: ClientContact[] }) {
+  const statusLabels: Record<ClientContact['status'], { label: string, color: string, bg: string }> = {
+    project_in_progress: { label: '프로젝트 진행 중', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    project_pending: { label: '프로젝트 접수 대기', color: 'text-blue-600', bg: 'bg-blue-50' },
+    bd_in_progress: { label: 'BD 진행 중', color: 'text-amber-600', bg: 'bg-amber-50' },
+    idle: { label: '휴면/기타', color: 'text-slate-400', bg: 'bg-slate-50' },
+  };
+
+  const statuses: ClientContact['status'][] = ['project_in_progress', 'project_pending', 'bd_in_progress', 'idle'];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-black text-slate-900 tracking-tight">내 고객사 관리</h2>
+          <p className="text-slate-500 text-sm">고객사별 프로젝트 및 BD 현황을 관리하세요.</p>
+        </div>
+        <div className="flex gap-2">
+          <button className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all">신규 고객사 추가</button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {statuses.map((status) => {
+          const filteredClients = clients.filter(c => c.status === status);
+          const config = statusLabels[status];
+
+          return (
+            <div key={status} className="space-y-4">
+              <div className={`flex items-center justify-between p-3 rounded-2xl ${config.bg} border border-slate-100`}>
+                <span className={`text-[11px] font-black uppercase tracking-wider ${config.color}`}>{config.label}</span>
+                <span className={`text-xs font-black ${config.color}`}>{filteredClients.length}</span>
+              </div>
+
+              <div className="space-y-3 min-h-[200px]">
+                {filteredClients.map((client) => (
+                  <motion.div
+                    key={client.id}
+                    whileHover={{ y: -2 }}
+                    className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{client.clientName}</h3>
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-medium mb-3">{client.contactName} {client.position}</p>
+                    
+                    <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-100 mb-3">
+                      <p className="text-[10px] text-slate-500 leading-relaxed line-clamp-3">
+                        {client.history}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[9px] font-bold">
+                      <span className="text-slate-400 uppercase tracking-tighter">최종 일자: {client.lastContactDate}</span>
+                      <button className="text-blue-600 hover:underline">상세보기</button>
+                    </div>
+                  </motion.div>
+                ))}
+                {filteredClients.length === 0 && (
+                  <div className="h-32 flex items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl">
+                    <span className="text-[10px] text-slate-300 italic">없음</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function ClientManagementList({ clients }: { clients: ClientContact[] }) {
   return (
     <div className="space-y-4">
@@ -434,11 +522,14 @@ export function ClientManagementList({ clients }: { clients: ClientContact[] }) 
                 <p className="text-xs text-slate-500 font-medium">{client.contactName} {client.position}</p>
               </div>
               <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${
-                client.status === 'active' ? 'bg-emerald-100 text-emerald-600' :
-                client.status === 'follow_up' ? 'bg-amber-100 text-amber-600' :
+                client.status === 'project_in_progress' ? 'bg-emerald-100 text-emerald-600' :
+                client.status === 'project_pending' ? 'bg-blue-100 text-blue-600' :
+                client.status === 'bd_in_progress' ? 'bg-amber-100 text-amber-600' :
                 'bg-slate-100 text-slate-500'
               }`}>
-                {client.status === 'active' ? '활발' : client.status === 'follow_up' ? '팔로업' : '휴면'}
+                {client.status === 'project_in_progress' ? '진행중' : 
+                 client.status === 'project_pending' ? '대기중' : 
+                 client.status === 'bd_in_progress' ? 'BD중' : '휴면'}
               </span>
             </div>
             
