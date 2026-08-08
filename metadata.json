@@ -1,0 +1,6 @@
+{
+  "name": "Remember Recruiter Dashboard",
+  "description": "A specialized professional dashboard for recruiting consultants at Remember, featuring project management, urgent task highlights, and collaboration tools.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
