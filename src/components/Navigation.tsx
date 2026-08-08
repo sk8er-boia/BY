@@ -28,7 +28,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-semibold">Consultant Portal</p>
       </div>
 
-      <nav className="flex-1 mt-6 px-4 space-y-2">
+      <nav id="sidebar-nav" className="flex-1 mt-6 px-4 space-y-2">
         {menuItems.map((item) => (
           <button
             key={item.id}
