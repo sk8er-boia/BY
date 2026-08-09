@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Project, BoardPost, DashboardStats, PlacementRecord, Candidate, ClientContact, PEFirm, IndustryPlacement } from './types';
+import { Project, BoardPost, DashboardStats, PlacementRecord, Candidate, ClientContact, PEFirm, IndustryPlacement, CandidateSBPost } from './types';
 
 export const MOCK_STATS: DashboardStats = {
   newProjects: 3,
@@ -285,5 +285,48 @@ export const BY_PLACEMENT_DATA: IndustryPlacement[] = [
       { id: 'c6', name: '삼성바이오', count: 4 },
       { id: 'c7', name: '셀트리온', count: 6 },
     ]
+  }
+];
+
+export const CANDIDATE_SB_POSTS: CandidateSBPost[] = [
+  {
+    id: 'csb1',
+    type: 'recommendation',
+    name: '김혁신',
+    company: 'A테크',
+    role: '서버 개발 리드',
+    content: '기술 면접까지 갔으나 컬처핏 차이로 아쉽게 드랍된 후보자입니다. 기술력은 정말 탁월하며, 이커머스 백엔드 리드 급으로 적극 추천합니다.',
+    author: '박정재 이사',
+    date: '2026-08-08',
+  },
+  {
+    id: 'csb2',
+    type: 'caution',
+    name: '이진상',
+    company: 'B물류',
+    role: '본부장',
+    content: '후보자가 헤드헌터에게 매우 고압적이며 막말을 하는 경향이 있습니다. 또한 과거 C사에서 평판이 매우 좋지 않았으니 진행 시 주의 요망.',
+    author: '이영희 상무',
+    date: '2026-08-07',
+  },
+  {
+    id: 'csb3',
+    type: 'caution',
+    name: '최고객',
+    company: 'C글로벌',
+    role: '인사담당자',
+    content: 'C글로벌 인사담당자 최고객님, 면접 일정 조율 시 매우 비협조적이며 피드백이 거의 없습니다. 컨택 시 멘탈 관리 필요.',
+    author: '정민수 상무',
+    date: '2026-08-06',
+  },
+  {
+    id: 'csb4',
+    type: 'off_limit',
+    name: '강이동',
+    company: 'D스타트업',
+    role: 'CFO',
+    content: '26년 3월에 입사하신 분입니다. 입사 1년 미만으로 Off-limit 조항에 해당되므로 당분간 터치 금지입니다.',
+    author: '장재혁 상무',
+    date: '2026-08-05',
   }
 ];

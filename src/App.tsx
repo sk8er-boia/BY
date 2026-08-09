@@ -13,10 +13,10 @@ import { CandidateManagementView } from './components/CandidateManagement';
 import { ProjectCreation } from './components/ProjectCreation';
 import { PEMap } from './components/PEMap';
 import { BYPlacement } from './components/BYPlacement';
-import { MOCK_STATS, MY_PROJECTS, ALL_PROJECTS, BOARD_POSTS, PLACEMENT_HISTORY, MOCK_CANDIDATES, CLIENT_CONTACTS, PE_MAP_DATA, BY_PLACEMENT_DATA } from './data';
+import { MOCK_STATS, MY_PROJECTS, ALL_PROJECTS, BOARD_POSTS, CANDIDATE_SB_POSTS, PLACEMENT_HISTORY, MOCK_CANDIDATES, CLIENT_CONTACTS, PE_MAP_DATA, BY_PLACEMENT_DATA } from './data';
 import { Bell, Search, User, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Project } from './types';
+import { Project, CandidateSBPost } from './types';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -244,7 +244,7 @@ export default function App() {
                 exit={{ opacity: 0, y: -10 }}
               >
                 {/* 5. Collaboration Board */}
-                <CollaborationBoard posts={BOARD_POSTS} projects={ALL_PROJECTS} />
+                <CollaborationBoard posts={BOARD_POSTS} projects={ALL_PROJECTS} candidatePosts={CANDIDATE_SB_POSTS} />
               </motion.div>
             )}
 

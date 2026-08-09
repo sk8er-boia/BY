@@ -4,8 +4,9 @@
  */
 
 import { Filter, Search, MessageCircle, Share2, MoreVertical, Calendar, Building2, ChevronDown, CheckCircle2, AlertTriangle, Users2, User } from 'lucide-react';
-import { Project, BoardPost } from '../types';
-import { motion } from 'motion/react';
+import { Project, BoardPost, CandidateSBPost } from '../types';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState } from 'react';
 
 export function ProjectGrid({ projects, title = "회사 모든 프로젝트" }: { projects: Project[], title?: string }) {
   return (
@@ -177,105 +178,206 @@ export function MyProjectDashboardList({
   );
 }
 
-export function CollaborationBoard({ posts, projects }: { posts: BoardPost[], projects: Project[] }) {
+export function CollaborationBoard({ posts, projects, candidatePosts }: { posts: BoardPost[], projects: Project[], candidatePosts: CandidateSBPost[] }) {
+  const [activeBoard, setActiveBoard] = useState<'project' | 'candidate'>('project');
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-xl font-bold text-slate-800">SB 게시판 (Share & Board)</h2>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md shadow-blue-100 hover:bg-blue-700 transition-all">글쓰기</button>
-      </div>
-      <div className="grid grid-cols-1 gap-6">
-        {posts.map((post) => {
-          const project = projects.find(p => p.id === post.projectId);
-          const revenue = project?.estimatedRevenue || 0;
-          const split = post.revenueSplit || "N/A";
-          
-          return (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col md:flex-row"
+        <div className="flex items-center gap-2">
+          <div className="flex bg-slate-100 p-1 rounded-xl">
+            <button 
+              onClick={() => setActiveBoard('project')}
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${activeBoard === 'project' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             >
-              {/* Left Stripe for Urgency */}
-              <div className={`w-full md:w-2 ${
-                post.urgency === 'immediate' ? 'bg-red-500' :
-                post.urgency === 'urgent' ? 'bg-amber-500' : 'bg-blue-500'
-              }`}></div>
+              프로젝트 SB
+            </button>
+            <button 
+              onClick={() => setActiveBoard('candidate')}
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${activeBoard === 'candidate' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              후보자 SB
+            </button>
+          </div>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md shadow-blue-100 hover:bg-blue-700 transition-all ml-2">글쓰기</button>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 gap-6">
+        <AnimatePresence mode="wait">
+          {activeBoard === 'project' && (
+            <motion.div
+              key="project-board"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
+            >
+              {posts.map((post) => {
+                const project = projects.find(p => p.id === post.projectId);
+                const revenue = project?.estimatedRevenue || 0;
+                const split = post.revenueSplit || "N/A";
+                
+                return (
+                  <motion.div
+                    key={post.id}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col md:flex-row"
+                  >
+                    {/* Left Stripe for Urgency */}
+                    <div className={`w-full md:w-2 ${
+                      post.urgency === 'immediate' ? 'bg-red-500' :
+                      post.urgency === 'urgent' ? 'bg-amber-500' : 'bg-blue-500'
+                    }`}></div>
 
-              <div className="flex-1 p-6">
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${
-                      post.urgency === 'immediate' ? 'bg-red-50 text-red-600 border border-red-100' :
-                      post.urgency === 'urgent' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
-                      'bg-blue-50 text-blue-600 border border-blue-100'
-                    }`}>
-                      {post.urgency === 'immediate' ? '즉시 대응' : post.urgency === 'urgent' ? '긴급 요청' : '공유 요청'}
-                    </span>
-                    <h3 className="text-xl font-black text-slate-900 tracking-tight">{post.title}</h3>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs font-bold">
-                    <span className="text-slate-400">매출 비중:</span>
-                    <span className={`px-3 py-1 rounded-full ${
-                      split === '8:2' ? 'bg-blue-900 text-white' :
-                      split === '7:3' ? 'bg-indigo-600 text-white' :
-                      split === '6:4' ? 'bg-purple-600 text-white' :
-                      'bg-slate-900 text-white'
-                    } shadow-sm`}>
-                      {split}
-                    </span>
-                  </div>
-                </div>
+                    <div className="flex-1 p-6">
+                      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${
+                            post.urgency === 'immediate' ? 'bg-red-50 text-red-600 border border-red-100' :
+                            post.urgency === 'urgent' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
+                            'bg-blue-50 text-blue-600 border border-blue-100'
+                          }`}>
+                            {post.urgency === 'immediate' ? '즉시 대응' : post.urgency === 'urgent' ? '긴급 요청' : '공유 요청'}
+                          </span>
+                          <h3 className="text-xl font-black text-slate-900 tracking-tight">{post.title}</h3>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs font-bold">
+                          <span className="text-slate-400">매출 비중:</span>
+                          <span className={`px-3 py-1 rounded-full ${
+                            split === '8:2' ? 'bg-blue-900 text-white' :
+                            split === '7:3' ? 'bg-indigo-600 text-white' :
+                            split === '6:4' ? 'bg-purple-600 text-white' :
+                            'bg-slate-900 text-white'
+                          } shadow-sm`}>
+                            {split}
+                          </span>
+                        </div>
+                      </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                  <div className="col-span-2">
-                    <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/50 p-4 rounded-2xl border border-slate-100 italic">
-                      "{post.content}"
-                    </p>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
-                      <span className="text-slate-400">예상 매출</span>
-                      <span className="text-blue-600">₩{(revenue / 10000).toLocaleString()}만</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
-                      <span className="text-slate-400">제출 기한</span>
-                      <span className="text-red-500">{post.deadline || 'ASAP'}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
-                      <span className="text-slate-400">고객사</span>
-                      <span className="text-slate-700">{project?.client || '미지정'}</span>
-                    </div>
-                  </div>
-                </div>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div className="col-span-2">
+                          <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/50 p-4 rounded-2xl border border-slate-100 italic">
+                            "{post.content}"
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                            <span className="text-slate-400">예상 매출</span>
+                            <span className="text-blue-600">₩{(revenue / 10000).toLocaleString()}만</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                            <span className="text-slate-400">제출 기한</span>
+                            <span className="text-red-500">{post.deadline || 'ASAP'}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                            <span className="text-slate-400">고객사</span>
+                            <span className="text-slate-700">{project?.client || '미지정'}</span>
+                          </div>
+                        </div>
+                      </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                      <User size={16} className="text-slate-400" />
+                      <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                            <User size={16} className="text-slate-400" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-800">{post.author}</p>
+                            <p className="text-[10px] text-slate-400">{post.date}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors">
+                            <MessageCircle size={14} /> 12
+                          </button>
+                          <button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors">
+                            <Share2 size={14} /> 공유
+                          </button>
+                          <button className="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all ml-2">
+                            후보자 추천하기
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs font-bold text-slate-800">{post.author}</p>
-                      <p className="text-[10px] text-slate-400">{post.date}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors">
-                      <MessageCircle size={14} /> 12
-                    </button>
-                    <button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors">
-                      <Share2 size={14} /> 공유
-                    </button>
-                    <button className="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all ml-2">
-                      후보자 추천하기
-                    </button>
-                  </div>
-                </div>
-              </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
-          );
-        })}
+          )}
+
+          {activeBoard === 'candidate' && (
+            <motion.div
+              key="candidate-board"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
+            >
+              {candidatePosts.map((post) => (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col md:flex-row"
+                >
+                  <div className={`w-full md:w-2 ${
+                    post.type === 'recommendation' ? 'bg-emerald-500' :
+                    post.type === 'caution' ? 'bg-red-500' : 'bg-purple-500'
+                  }`}></div>
+
+                  <div className="flex-1 p-6">
+                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                      <div className="flex items-center gap-3">
+                        <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${
+                          post.type === 'recommendation' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
+                          post.type === 'caution' ? 'bg-red-50 text-red-600 border border-red-100' :
+                          'bg-purple-50 text-purple-600 border border-purple-100'
+                        }`}>
+                          {post.type === 'recommendation' ? '추천 희망' : post.type === 'caution' ? '주의 요망' : '오프 리미트'}
+                        </span>
+                        <h3 className="text-xl font-black text-slate-900 tracking-tight">{post.name} {post.role && <span className="text-slate-400 text-sm font-medium ml-2">{post.role}</span>}</h3>
+                      </div>
+                      {post.company && (
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+                          <Building2 size={12} /> {post.company}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mb-6">
+                      <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/50 p-4 rounded-2xl border border-slate-100 italic">
+                        "{post.content}"
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                          <User size={16} className="text-slate-400" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-800">{post.author}</p>
+                          <p className="text-[10px] text-slate-400">{post.date}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors">
+                          <MessageCircle size={14} /> 3
+                        </button>
+                        <button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors">
+                          <Share2 size={14} /> 공유
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

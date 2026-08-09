@@ -65,6 +65,17 @@ export interface BoardPost {
   deadline?: string;
 }
 
+export interface CandidateSBPost {
+  id: string;
+  type: 'recommendation' | 'caution' | 'off_limit';
+  name: string;
+  company?: string;
+  role?: string;
+  content: string;
+  author: string;
+  date: string;
+}
+
 export interface DashboardStats {
   newProjects: number;
   ongoingProjects: number;
