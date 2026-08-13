@@ -6,19 +6,25 @@
 import { useState } from 'react';
 import { PEFirm } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
-import { Building2, ChevronRight, LayoutGrid } from 'lucide-react';
+import { Building2, ChevronRight, LayoutGrid, Info } from 'lucide-react';
 
 export function PEMap({ data }: { data: PEFirm[] }) {
   const [selectedPE, setSelectedPE] = useState<PEFirm | null>(null);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">PE Map</h2>
-          <p className="text-slate-500 text-sm">국내 주요 PE별 포트폴리오 현황</p>
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-2">PE Map</h2>
+          <div className="flex items-center gap-3">
+            <p className="text-slate-500 text-sm font-medium">국내 주요 PE별 포트폴리오 현황</p>
+            <span className="inline-flex items-center gap-1 text-slate-400 text-[11px]">
+              <Info size={12} />
+              출처: 각 사 공식 홈페이지 및 인베스트조선, 한국경제 등 주요 경제지 M&A 최신 공시 교차 검증 (26.08 기준)
+            </span>
+          </div>
         </div>
-        <LayoutGrid className="text-slate-300" size={24} />
+        <LayoutGrid className="text-slate-300 hidden sm:block" size={24} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

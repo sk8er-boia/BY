@@ -226,15 +226,23 @@ export const PE_MAP_DATA: PEFirm[] = [
       { id: 'pc1', name: '브레이브모바일' },
       { id: 'pc2', name: '팀스파르타' },
       { id: 'pc3', name: '창신' },
+      { id: 'pc_ark1', name: '카시나' },
     ]
   },
   {
     id: 'pe2',
-    name: '앵커',
+    name: '앵커 PE',
     size: 80,
     portfolio: [
       { id: 'pc4', name: '국제전기' },
       { id: 'pc5', name: '솔리티' },
+      { id: 'pc_anchor1', name: '투썸플레이스' },
+      { id: 'pc_anchor2', name: '카카오엔터테인먼트' },
+      { id: 'pc_anchor3', name: '프레시지' },
+      { id: 'pc_anchor4', name: '이투스' },
+      { id: 'pc_anchor5', name: '메타엠' },
+      { id: 'pc_anchor6', name: 'SK일렉링크' },
+      { id: 'pc_anchor7', name: '컬리' },
     ]
   },
   {
@@ -244,6 +252,11 @@ export const PE_MAP_DATA: PEFirm[] = [
     portfolio: [
       { id: 'pc6', name: '홈플러스' },
       { id: 'pc7', name: '롯데카드' },
+      { id: 'pc_mbk1', name: '지오영' },
+      { id: 'pc_mbk2', name: '커넥트웨이브 (다나와·에누리)' },
+      { id: 'pc_mbk3', name: '네파 (NEPA)' },
+      { id: 'pc_mbk4', name: '다이닝브랜즈그룹 (BHC)' },
+      { id: 'pc_mbk5', name: '골프존카운티' },
     ]
   },
   {
@@ -252,7 +265,67 @@ export const PE_MAP_DATA: PEFirm[] = [
     size: 120,
     portfolio: [
       { id: 'pc8', name: '남양유업' },
-      { id: 'pc9', name: 'SKC 코오롱PI' },
+      { id: 'pc_hahn1', name: 'SK스페셜티' },
+      { id: 'pc_hahn2', name: '쌍용C&E' },
+      { id: 'pc_hahn3', name: 'SK해운' },
+      { id: 'pc_hahn4', name: '에이치라인해운' },
+      { id: 'pc_hahn5', name: '케이카 (K Car)' },
+      { id: 'pc_hahn6', name: '루트로닉' },
+      { id: 'pc_hahn7', name: 'SK마이크로웍스' },
+      { id: 'pc_hahn8', name: '솔믹스' },
+      { id: 'pc_hahn9', name: '대한항공C&D' },
+      { id: 'pc_hahn10', name: '라한호텔' },
+    ]
+  },
+  {
+    id: 'pe5',
+    name: 'IMM PE',
+    size: 140,
+    portfolio: [
+      { id: 'pc_imm1', name: '에어퍼스트' },
+      { id: 'pc_imm2', name: '한샘' },
+      { id: 'pc_imm3', name: '하나투어' },
+      { id: 'pc_imm4', name: '쏘카 (SOCAR)' },
+      { id: 'pc_imm5', name: '에이블씨엔씨 (미샤)' },
+      { id: 'pc_imm6', name: '펫프렌즈' },
+    ]
+  },
+  {
+    id: 'pe6',
+    name: '스틱인베스트먼트',
+    size: 110,
+    portfolio: [
+      { id: 'pc_stic1', name: '크린토피아' },
+      { id: 'pc_stic2', name: '녹수' },
+      { id: 'pc_stic3', name: '뮤직카우' },
+      { id: 'pc_stic4', name: '휴맥스모빌리티' },
+      { id: 'pc_stic5', name: '쿠프마케팅' },
+      { id: 'pc_stic6', name: '한화시스템' },
+    ]
+  },
+  {
+    id: 'pe7',
+    name: '글랜우드PE',
+    size: 90,
+    portfolio: [
+      { id: 'pc_glen1', name: '나노H2O(LG화학 수처리사업부)' },
+      { id: 'pc_glen2', name: 'CJ올리브영' },
+      { id: 'pc_glen3', name: '해양에너지' },
+      { id: 'pc_glen4', name: '서라벌도시가스' },
+      { id: 'pc_glen5', name: 'SK피유코어' },
+    ]
+  },
+  {
+    id: 'pe8',
+    name: 'EQT파트너스',
+    size: 160,
+    portfolio: [
+      { id: 'pc_eqt1', name: '리멤버' },
+      { id: 'pc_eqt2', name: '더존비즈온' },
+      { id: 'pc_eqt3', name: 'SK쉴더스' },
+      { id: 'pc_eqt4', name: '리에나 (구 KJ환경)' },
+      { id: 'pc_eqt5', name: '애큐온저축은행' },
+      { id: 'pc_eqt6', name: '애큐온캐피탈' },
     ]
   }
 ];
